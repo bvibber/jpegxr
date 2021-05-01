@@ -39,8 +39,8 @@
 #endif	// __ANSI__
 
 
-//#if defined(WIN32)
-#if defined(WIN32) && !defined(UNDER_CE)  // WIN32 seems to be defined always in VS2005 for ARM platform
+//#if defined(_WIN32)
+#if defined(_WIN32) && !defined(UNDER_CE)  // _WIN32 seems to be defined always in VS2005 for ARM platform
 // x86
 //#define CDECL __cdecl
 #define DECLSPEC_ALIGN(bytes) __declspec(align(bytes))
