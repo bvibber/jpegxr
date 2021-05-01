@@ -505,8 +505,29 @@ impl PixelInfo {
         BitDepthBits::from_raw(self.raw.bdBitDepth).unwrap()
     }
 
-    // what is cbitUnit?
-    // what is grBit?
+    pub fn bits_per_pixel(&self) -> usize {
+        self.raw.cbitUnit as usize
+    }
+
+    pub fn has_alpha(&self) -> bool {
+        (self.raw.grBit as u32 & PK_pixfmtHasAlpha) != 0
+    }
+
+    pub fn premultiplied_alpha(&self) -> bool {
+        (self.raw.grBit as u32 & PK_pixfmtPreMul) != 0
+    }
+
+    pub fn bgr(&self) -> bool {
+        (self.raw.grBit as u32 & PK_pixfmtBGR) != 0
+    }
+
+    pub fn photometric_interpretation(&self) -> PhotometricInterpretation {
+        PhotometricInterpretation::from_raw(self.raw.uInterpretation).unwrap()
+    }
+
+    pub fn samples_per_pixel(&self) -> usize {
+        self.raw.uSamplePerPixel as usize
+    }
 }
 
 
