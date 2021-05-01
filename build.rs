@@ -39,6 +39,7 @@ fn main() {
         .include("jxrlib/jxrgluelib")
         .define("__ANSI__", None)
         .define("DISABLE_PERF_MEASUREMENT", None)
+        // quiet the build on mac with clang
         .flag_if_supported("-Wno-constant-conversion")
         .flag_if_supported("-Wno-unused-const-variable")
         .flag_if_supported("-Wno-deprecated-declarations")
@@ -51,6 +52,14 @@ fn main() {
         .flag_if_supported("-Wno-shift-negative-value")
         .flag_if_supported("-Wno-dangling-else")
         .flag_if_supported("-Wno-sign-compare")
+        // quiet the build on linux with gcc
+        .flag_if_supported("-Wno-strict-aliasing")
+        .flag_if_supported("-Wno-implicit-fallthrough")
+        .flag_if_supported("-Wno-old-style-declaration")
+        .flag_if_supported("-Wno-endif-labels")
+        .flag_if_supported("-Wno-parentheses")
+        .flag_if_supported("-Wno-misleading-indentation")
+        .flag_if_supported("-Wno-unused-but-set-variable")
         .opt_level(2);
 
     build.compile("jpegxr");
