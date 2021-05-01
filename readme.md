@@ -4,8 +4,6 @@ This is a Rust wrapper around the C libjpegxr / jxrlib codec open-sourced by Mic
 
 Currently only decoding is supported, but adding an encoder interface should be straightforward.
 
-It is in a very early state, and probably only compiles on Windows at the moment but will shortly be fixed to be cross-platform.
-
 # Authors
 
 The wrapped C JPEG XR library was written by many fine folks at Microsoft!
