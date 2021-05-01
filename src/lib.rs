@@ -382,7 +382,7 @@ pub enum ColorFormat {
 }
 
 impl ColorFormat {
-    pub fn from_raw(raw: COLORFORMAT) -> Result<ColorFormat> {
+    fn from_raw(raw: COLORFORMAT) -> Result<ColorFormat> {
         match raw {
             COLORFORMAT_Y_ONLY => Ok(ColorFormat::YOnly),
             COLORFORMAT_YUV_420 => Ok(ColorFormat::YUV420),
@@ -412,7 +412,7 @@ pub enum PhotometricInterpretation {
 }
 
 impl PhotometricInterpretation {
-    pub fn from_raw(raw: u32) -> Result<PhotometricInterpretation> {
+    fn from_raw(raw: u32) -> Result<PhotometricInterpretation> {
         use PhotometricInterpretation::*;
         match raw {
             PK_PI_W0 => Ok(WhiteIsZero),
@@ -450,7 +450,7 @@ pub enum BitDepthBits {
 }
 
 impl BitDepthBits {
-    pub fn from_raw(raw: i32) -> Result<BitDepthBits> {
+    fn from_raw(raw: BITDEPTH_BITS) -> Result<BitDepthBits> {
         use BitDepthBits::*;
         match raw {
             BITDEPTH_BITS_BD_1 => Ok(One),

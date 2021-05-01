@@ -39,6 +39,18 @@ fn main() {
         .include("jxrlib/jxrgluelib")
         .define("__ANSI__", None)
         .define("DISABLE_PERF_MEASUREMENT", None)
+        .flag_if_supported("-Wno-constant-conversion")
+        .flag_if_supported("-Wno-unused-const-variable")
+        .flag_if_supported("-Wno-deprecated-declarations")
+        .flag_if_supported("-Wno-comment")
+        .flag_if_supported("-Wno-unused-value")
+        .flag_if_supported("-Wno-unused-function")
+        .flag_if_supported("-Wno-unknown-pragmas")
+        .flag_if_supported("-Wno-extra-tokens")
+        .flag_if_supported("-Wno-missing-field-initializers")
+        .flag_if_supported("-Wno-shift-negative-value")
+        .flag_if_supported("-Wno-dangling-else")
+        .flag_if_supported("-Wno-sign-compare")
         .opt_level(2);
 
     build.compile("jpegxr");

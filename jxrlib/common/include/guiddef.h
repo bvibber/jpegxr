@@ -41,11 +41,7 @@ typedef struct {
 } GUID;
 #else
 typedef struct _GUID {
-#if defined(_WINDOWS_) || !__LP64__
     unsigned long  Data1;
-#else
-    unsigned int   Data1;
-#endif
     unsigned short Data2;
     unsigned short Data3;
     unsigned char  Data4[ 8 ];
@@ -57,7 +53,8 @@ typedef struct _GUID {
 #if defined(_WIN32) || defined(__ANSI__)
 #define FAR
 #else
-#define FAR _far
+//#define FAR _far
+#define FAR
 #endif
 #endif
 
