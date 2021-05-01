@@ -3,6 +3,13 @@ name = "jpegxr"
 version = "0.1.0"
 authors = ["Brion Vibber <brion@pobox.com>"]
 edition = "2018"
+license = "BSD"
+description = "Wrapper for Microsoft's C JPEG XR image codec library"
+readme = "readme.md"
+homepage = "https://github.com/brion/jpegxr"
+repository = "https://github.com/brion/jpegxr.git"
+keywords = ["jxr", "jpegxr", "jpeg-xr"]
+categories = ["multimedia::images"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

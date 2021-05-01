@@ -35,7 +35,7 @@ let (width, height) = decoder.get_size()?;
 let stride = width * 16;
 let size = stride * height;
 let buffer = Vec::<u8>::with_capacity(size);
-decoder.copy_all(&buffer, stride)?;
+decoder.copy_all(&mut buffer, stride)?;
 
 // now do stuff with the data
 ```
