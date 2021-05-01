@@ -44,13 +44,12 @@
 //================================
 #define FORCE_INLINE
 #define CDECL
-#if __LP64__
-#define UINTPTR_T unsigned long long
-#define INTPTR_T long long
-#else
-#define UINTPTR_T unsigned int
-#define INTPTR_T int
-#endif
+
+// Note these are modified from the original library,
+// which made its own defs that were wrong on Linux.
+#include <stdint.h>
+#define UINTPTR_T uintptr_t
+#define INTPTR_T intptr_t
 
 
 //================================
@@ -59,3 +58,12 @@
 //#define RECIP_QUANT_OPT
 
 
+//================================
+// For big-endian Linux; not tested
+//================================
+#ifdef __linux__
+#include <endian.h>
+#if __BYTE_ORDER == __BIG_ENDIAN
+#define _BIG__ENDIAN_
+#endif
+#endif

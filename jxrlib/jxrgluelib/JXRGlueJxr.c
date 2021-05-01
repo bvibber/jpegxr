@@ -1744,8 +1744,11 @@ ERR ParsePFDEntry(
             break;
 
         default:
+#if defined(_DEBUG) || defined(DBG)
+            // This was originally unconditional, spamming stderr on every file open.
             fprintf(stderr, "Unrecognized WMPTag: %d(%#x), %d, %d, %#x" CRLF,
                 (int)uTag, (int)uTag, (int)uType, (int)uCount, (int)uValue);
+#endif
             break;
     }
 
