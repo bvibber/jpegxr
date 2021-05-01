@@ -781,3 +781,32 @@ impl<R> Drop for ImageDecode<R> where R: Read + Seek {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::fs::{File};
+    use crate::ImageDecode;
+    use crate::PixelFormat::*;
+
+    #[test]
+    fn it_works() {
+        let input_result = File::open("samples/panel-hdr.jxr");
+        assert!(input_result.is_ok());
+        let input = input_result.unwrap();
+
+        let decoder_result = ImageDecode::with_reader(input);
+        assert!(decoder_result.is_ok());
+        let decoder = decoder_result.unwrap();
+
+        let size_result = decoder.get_size();
+        assert!(size_result.is_ok());
+        let (width, height) = size_result.unwrap();
+        assert_eq!(width, 3440);
+        assert_eq!(height, 1440);
+
+        let pixfmt_result = decoder.get_pixel_format();
+        assert!(pixfmt_result.is_ok());
+        let pixfmt = pixfmt_result.unwrap();
+        assert_eq!(pixfmt, PixelFormat128bppRGBAFloat);
+    }
+}
