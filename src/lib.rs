@@ -356,8 +356,16 @@ static GUID_MAP: &[(&GUID, PixelFormat)] = unsafe {
     ]
 };
 
-
 impl PixelFormat {
+
+    fn guid(&self) -> &'static GUID {
+        for (map_guid, map_val) in GUID_MAP {
+            if self == map_val {
+                return map_guid;
+            }
+        }
+        unreachable!("bad pixel format enum")
+    }
 
     fn from_guid(&guid: &GUID) -> Result<Self> {
         for (&map_guid, map_val) in GUID_MAP {
@@ -370,6 +378,7 @@ impl PixelFormat {
 
 }
 
+#[derive(Debug, Eq, PartialEq, Clone, Copy)]
 pub enum ColorFormat {
     YOnly,
     YUV420,
@@ -397,7 +406,7 @@ impl ColorFormat {
     }
 }
 
-
+#[derive(Debug, Eq, PartialEq, Clone, Copy)]
 pub enum PhotometricInterpretation {
     WhiteIsZero,
     BlackIsZero,
@@ -430,6 +439,7 @@ impl PhotometricInterpretation {
     }
 }
 
+#[derive(Debug, Eq, PartialEq, Clone, Copy)]
 pub enum BitDepthBits {
     // regular ones
     One, //White is foreground
@@ -476,8 +486,13 @@ pub struct PixelInfo {
 
 impl PixelInfo {
 
-    pub fn from_guid(guid: &GUID) -> Result<PixelInfo> {
+    fn from_guid(guid: &GUID) -> Result<Self> {
         unsafe {
+            // It looks wrong to put a pointer into
+            // the struct, but it's fine because the
+            // entire struct gets overwritten, so the
+            // output struct contains a static-lifetime
+            // pointer.
             let mut info = PixelInfo {
                 raw: std::mem::zeroed()
             };
@@ -487,10 +502,18 @@ impl PixelInfo {
         }
     }
 
-    pub fn format(&self) -> &GUID {
+    fn guid(&self) -> &GUID {
         unsafe {
             &*self.raw.pGUIDPixFmt
         }
+    }
+
+    pub fn from_format(format: PixelFormat) -> Self {
+        Self::from_guid(format.guid()).unwrap()
+    }
+
+    pub fn format(&self) -> PixelFormat {
+        PixelFormat::from_guid(self.guid()).unwrap()
     }
 
     pub fn channels(&self) -> usize {
@@ -787,6 +810,10 @@ mod tests {
     use std::fs::{File};
     use crate::ImageDecode;
     use crate::PixelFormat::*;
+    use crate::PixelInfo;
+    use crate::ColorFormat;
+    use crate::BitDepthBits;
+    use crate::PhotometricInterpretation;
 
     #[test]
     fn it_works() {
@@ -808,5 +835,15 @@ mod tests {
         assert!(pixfmt_result.is_ok());
         let pixfmt = pixfmt_result.unwrap();
         assert_eq!(pixfmt, PixelFormat128bppRGBAFloat);
+
+        let info = PixelInfo::from_format(pixfmt);
+        assert_eq!(info.channels(), 4);
+        assert_eq!(info.color_format(), ColorFormat::RGB);
+        assert_eq!(info.bit_depth(), BitDepthBits::ThirtyTwoF);
+        assert_eq!(info.has_alpha(), true);
+        assert_eq!(info.premultiplied_alpha(), false);
+        assert_eq!(info.bgr(), false);
+        assert_eq!(info.photometric_interpretation(), PhotometricInterpretation::RGB);
+        assert_eq!(info.samples_per_pixel(), 4);
     }
 }

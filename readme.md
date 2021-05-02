@@ -17,22 +17,20 @@ BSD-style license; see `license.md` or the headers in source files.
 
 ```rust
 use fs;
-use jpegxr::{ImageDecoder, PixelFormat::*};
+use jpegxr::{ImageDecode, PixelInfo};
 
 // ...
 
 let input = File::open(filename)?;
 let mut decoder = ImageDecode::with_reader(input)?;
 
-let format = decoder.get_pixel_format()?;
-if format != PixelFormat128bppRGBAFloat {
-    panic!("not the pixel format I expected! abort!");
-}
 let (width, height) = decoder.get_size()?;
-// This format has a 16-byte-per-pixel size
-let stride = width * 16;
+let info = PixelInfo::from_format(get_pixel_format()?);
+let stride = width * info.bytes_per_pixel() / 8;
 let size = stride * height;
+
 let buffer = Vec::<u8>::with_capacity(size);
+buffer.resize(size, 0);
 decoder.copy_all(&mut buffer, stride)?;
 
 // now do stuff with the data
@@ -51,8 +49,6 @@ HDR images with 32-bit floating point RGBA elements, as saved from the NVIDIA ga
 
 # Future plans
 
-* test and fix on Linux
-* test and fix on Mac
 * add encoder interface
 * performance / multithreading
 * more testing of obscure stuff
