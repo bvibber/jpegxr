@@ -36,8 +36,7 @@ fn main() {
     ];
     let mut builder = cc::Build::new();
     if emscripten {
-        builder.flag("-s");
-        builder.flag("DISABLE_EXCEPTION_CATCHING=1");
+        builder.flag("-fignore-exceptions");
     }
     builder
         .files(src.iter())
