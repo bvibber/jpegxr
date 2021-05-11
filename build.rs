@@ -33,8 +33,6 @@ fn main() {
         "jxrlib/jxrgluelib/JXRGlueJxr.c",
         "jxrlib/jxrgluelib/JXRGluePFC.c",
         "jxrlib/jxrgluelib/JXRMeta.c",
-        // hack including c++ library
-        //"jxrlib/wasm-hack.cpp",
     ];
     let mut builder = cc::Build::new();
     let build = builder
@@ -67,11 +65,6 @@ fn main() {
         .flag_if_supported("-Wno-misleading-indentation")
         .flag_if_supported("-Wno-unused-but-set-variable")
         .opt_level(2);
-    if emscripten {
-        build.flag("-fvisibility=default");
-        //build.flag("-s");
-        //build.flag("DISABLE_EXCEPTION_CATCHING=0");
-    }
     build.compile("jpegxr");
 
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
