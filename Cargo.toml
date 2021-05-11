@@ -1,6 +1,6 @@
 [package]
 name = "jpegxr"
-version = "0.2.5"
+version = "0.2.6"
 authors = ["Brion Vibber <brion@pobox.com>"]
 edition = "2018"
 license = "BSD-3-Clause"
@@ -22,6 +22,11 @@ cc = { version = "1.0.67", features = ["parallel"] }
 bindgen = "0.58.1"
 
 ## for testing
+#
+[features]
+defaults=[]
+bin=[]
+
 #
 #[lib]
 #crate-type = ["rlib", "cdylib"]

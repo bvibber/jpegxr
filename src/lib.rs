@@ -848,10 +848,9 @@ mod tests {
     }
 }
 
-/*
+#[cfg(feature = "bin")]
 #[no_mangle]
 pub unsafe extern "C"
 fn main(_argc: u32, _argv: *const *const i8) -> u32 {
     0
 }
-*/
