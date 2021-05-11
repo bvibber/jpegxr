@@ -50,5 +50,4 @@ HDR images with 32-bit floating point RGBA elements, as saved from the NVIDIA ga
 # Future plans
 
 * add encoder interface
-* performance / multithreading
 * more testing of obscure stuff

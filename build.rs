@@ -35,7 +35,7 @@ fn main() {
         "jxrlib/jxrgluelib/JXRMeta.c",
     ];
     let mut builder = cc::Build::new();
-    let build = builder
+    builder
         .files(src.iter())
         .include("jxrlib")
         .include("jxrlib/common/include")
@@ -64,8 +64,8 @@ fn main() {
         .flag_if_supported("-Wno-parentheses")
         .flag_if_supported("-Wno-misleading-indentation")
         .flag_if_supported("-Wno-unused-but-set-variable")
-        .opt_level(2);
-    build.compile("jpegxr");
+        .opt_level(2)
+        .compile("jpegxr");
 
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
     let mut clang_args = Vec::<String>::new();
@@ -77,7 +77,7 @@ fn main() {
             .expect("Failed to invoke 'emcc --cflags'")
             .stdout;
 
-        // fixme this could includes quotes?
+        // @fixme this could includes quotes in paths?
         clang_args.extend(std::str::from_utf8(&cflags)
             .expect("UTF-8 failure on emcc --cflags")
             .split(" ")
