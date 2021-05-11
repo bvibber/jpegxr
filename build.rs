@@ -35,6 +35,10 @@ fn main() {
         "jxrlib/jxrgluelib/JXRMeta.c",
     ];
     let mut builder = cc::Build::new();
+    if emscripten {
+        builder.flag("-s");
+        builder.flag("DISABLE_EXCEPTION_CATCHING=1");
+    }
     builder
         .files(src.iter())
         .include("jxrlib")
