@@ -41,11 +41,11 @@ EXTERN_C Int DecodeMacroblockLowpass(CWMImageStrCodec *, CCodingContext *, Int, 
 EXTERN_C Int DecodeMacroblockHighpass(CWMImageStrCodec *, CCodingContext *, Int, Int);
 EXTERN_C Void predDCACDec(CWMImageStrCodec *);
 EXTERN_C Void predACDec(CWMImageStrCodec *);
-EXTERN_C Void StrIODecTerm(CWMImageStrCodec *);
+EXTERN_C Int StrIODecTerm(CWMImageStrCodec *);
 EXTERN_C Void FreeCodingContextDec(CWMImageStrCodec *);
 
 EXTERN_C Int StrEncInit(CWMImageStrCodec *);
-EXTERN_C Void StrIOEncTerm(CWMImageStrCodec *);
+EXTERN_C Int StrIOEncTerm(CWMImageStrCodec *);
 EXTERN_C Void FreeCodingContextEnc(CWMImageStrCodec *);
 EXTERN_C Int  encodeMB(CWMImageStrCodec *, Int, Int);
 EXTERN_C Int  writeIndexTableNull(CWMImageStrCodec *);

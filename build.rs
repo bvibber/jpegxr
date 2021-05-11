@@ -1,8 +1,12 @@
 use std::env;
 use std::path::PathBuf;
+use std::process::Command;
 
 fn main() {
-    let src = [
+    let target = env::var("TARGET").expect("empty TARGET");
+    let emscripten = target == "wasm32-unknown-emscripten";
+
+    let src = vec![
         // SRC_SYS
         "jxrlib/image/sys/adapthuff.c",
         "jxrlib/image/sys/image.c",
@@ -29,6 +33,8 @@ fn main() {
         "jxrlib/jxrgluelib/JXRGlueJxr.c",
         "jxrlib/jxrgluelib/JXRGluePFC.c",
         "jxrlib/jxrgluelib/JXRMeta.c",
+        // hack including c++ library
+        //"jxrlib/wasm-hack.cpp",
     ];
     let mut builder = cc::Build::new();
     let build = builder
@@ -61,27 +67,49 @@ fn main() {
         .flag_if_supported("-Wno-misleading-indentation")
         .flag_if_supported("-Wno-unused-but-set-variable")
         .opt_level(2);
-
+    if emscripten {
+        build.flag("-fvisibility=default");
+        //build.flag("-s");
+        //build.flag("DISABLE_EXCEPTION_CATCHING=0");
+    }
     build.compile("jpegxr");
 
-    let bindings = bindgen::Builder::default()
+    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
+    let mut clang_args = Vec::<String>::new();
+    if emscripten {
+        // emcc --cflags
+        let cflags = Command::new("emcc")
+            .arg("--cflags")
+            .output()
+            .expect("Failed to invoke 'emcc --cflags'")
+            .stdout;
+
+        // fixme this could includes quotes?
+        clang_args.extend(std::str::from_utf8(&cflags)
+            .expect("UTF-8 failure on emcc --cflags")
+            .split(" ")
+            .map(|str| str.to_string()));
+
+        // workaround for https://github.com/rust-lang/rust-bindgen/issues/751
+        clang_args.push("-fvisibility=default".to_string());
+    }
+    clang_args.push("-D__ANSI__".to_string());
+    clang_args.push("-DDISABLE_PERF_MEASUREMENT".to_string());
+    clang_args.push("-Ijxrlib/jxrgluelib".to_string());
+    clang_args.push("-Ijxrlib/common/include".to_string());
+    clang_args.push("-Ijxrlib/image/sys".to_string());
+
+    bindgen::Builder::default()
         .header("jxrlib/jxrgluelib/JXRGlue.h")
         .allowlist_function("^(WMP|PK|PixelFormatLookup|GetPixelFormatFromHash|GetImageEncodeIID|GetImageDecodeIID|FreeDescMetadata).*")
         .allowlist_var("^(WMP|PK|LOOKUP|GUID_PK|IID).*")
         .allowlist_type("^(WMP|PK|ERR|BITDEPTH|BD_|BITDEPTH_BITS|COLORFORMAT).*")
-        .clang_args(&[
-            "-Ijxrlib/jxrgluelib",
-            "-Ijxrlib/common/include",
-            "-Ijxrlib/image/sys"
-        ])
+        .clang_args(&clang_args)
         .derive_eq(true)
         .size_t_is_usize(true)
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))
         .generate()
-        .expect("Error building libjpegxr bindings");
-
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    bindings
+        .expect("Error building libjpegxr bindings")
         .write_to_file(out_path.join("bindings.rs"))
         .expect("Couldn't write bindings!");
 }
