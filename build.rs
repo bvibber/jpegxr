@@ -81,6 +81,7 @@ fn main() {
         clang_args.extend(std::str::from_utf8(&cflags)
             .expect("UTF-8 failure on emcc --cflags")
             .split(" ")
+            .filter(|&str| str != "-fignore-exceptions") // for clang 11 and earlier
             .map(|str| str.to_string()));
 
         // workaround for https://github.com/rust-lang/rust-bindgen/issues/751
