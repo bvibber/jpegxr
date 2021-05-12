@@ -47,7 +47,7 @@ let jpegxr = require('jpegxr');
 let bytes = fs.readFileSync(filename);
 jpegxr().then((codec) => {
     let image = codec.decode(bytes);
-    let stride = image.width * image.pixelInfo.bytesPerPixel / 8;
+    let stride = image.width * image.pixelInfo.bitsPerPixel / 8;
     // do stuff with image.bytes
 });
 ```
