@@ -24,12 +24,12 @@ Module.imageDecode = function(bytesIn) {
             }
             try {
                 let channels = Module._pixel_info_channels(pixelInfo);
-                let colorFormat = Module._pixel_info_color_format(pixelInfo);
-                let bitDepth = Module._pixel_info_bit_depth(pixelInfo);
+                let colorFormat = UTF8ToString(Module._pixel_info_color_format(pixelInfo));
+                let bitDepth = UTF8ToString(Module._pixel_info_bit_depth(pixelInfo));
                 let bitsPerPixel = Module._pixel_info_bits_per_pixel(pixelInfo);
-                let hasAlpha = Module._pixel_info_has_alpha(pixelInfo);
-                let premultipledAlpha = Module._pixel_info_premultiplied_alpha(pixelInfo);
-                let bgr = Module._pixel_info_bgr(pixelInfo);
+                let hasAlpha = !!Module._pixel_info_has_alpha(pixelInfo);
+                let premultipledAlpha = !!Module._pixel_info_premultiplied_alpha(pixelInfo);
+                let bgr = !!Module._pixel_info_bgr(pixelInfo);
 
                 let sizeOut = width * height * bitsPerPixel / 8;
                 let bufferOut = Module._malloc(sizeOut);

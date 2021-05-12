@@ -26,17 +26,39 @@ size_t pixel_info_channels(PKPixelInfo* info)
 }
 
 EMSCRIPTEN_KEEPALIVE
-int pixel_info_color_format(const PKPixelInfo* info)
+const char *pixel_info_color_format(const PKPixelInfo* info)
 {
-    // @fixme map to string
-    return (int)info->cfColorFormat;
+    switch (info->cfColorFormat) {
+        case Y_ONLY: return "YOnly";
+	    case YUV_420: return "YUV420";
+	    case YUV_422: return "YUV422";
+	    case YUV_444: return "YUV4444";
+	    case CMYK: return "CMYK";
+        case NCOMPONENT: return "NComponent";
+        case CF_RGB: return "RGB";
+	    case CF_RGBE: return "RGBE";
+        default: return NULL;
+    }
 }
 
 EMSCRIPTEN_KEEPALIVE
-int pixel_info_bit_depth(const PKPixelInfo* info)
+const char *pixel_info_bit_depth(const PKPixelInfo* info)
 {
-    // @fixme map to string
-    return (int)info->bdBitDepth;
+    switch (info->bdBitDepth) {
+        case BD_1: return "1"; //White is foreground
+        case BD_8: return "8";
+        case BD_16: return "16";
+        case BD_16S: return "16Fixed";
+        case BD_16F: return "16Float";
+        case BD_32: return "32";
+        case BD_32S: return "32Fixed";
+        case BD_32F: return "32Float";
+        case BD_5: return "5";
+        case BD_10: return "10";
+        case BD_565: return "565";
+        case BD_1alt: return "1alt"; //Black is foreground
+        default: return NULL;
+    }
 }
 
 EMSCRIPTEN_KEEPALIVE
