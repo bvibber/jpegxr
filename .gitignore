@@ -1,5 +1,5 @@
 /target
 Cargo.lock
 .vscode
-jpegxr.js
+/wasm/jpegxr.js
 *.o

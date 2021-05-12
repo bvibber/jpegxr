@@ -4,7 +4,7 @@
   "description": "Wrapper for Microsoft's C JPEG XR image codec library",
   "main": "jpegxr.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "make test"
   },
   "repository": {
     "type": "git",

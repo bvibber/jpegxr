@@ -24,7 +24,7 @@ LINK_FLAGS := \
 	-s EXPORT_NAME=jpegxr \
 	-s SINGLE_FILE=1 \
 	--no-entry \
-	--post-js=wasm_api.js \
+	--post-js=wasm/wasm_api.js \
 	-s EXPORTED_FUNCTIONS='["_malloc","_free"]' \
 	-s ALLOW_MEMORY_GROWTH=1
 
@@ -52,11 +52,11 @@ SOURCES := \
 	jxrlib/jxrgluelib/JXRGlueJxr.c \
 	jxrlib/jxrgluelib/JXRGluePFC.c \
 	jxrlib/jxrgluelib/JXRMeta.c \
-	wasm_api.c
+	wasm/wasm_api.c
 
 OBJECTS := ${SOURCES:.c=.o}
 
-OUTPUT := jpegxr.js
+OUTPUT := wasm/jpegxr.js
 
 .PHONY: all clean
 
@@ -64,6 +64,9 @@ all: ${OUTPUT} ${DIS}
 
 clean:
 	rm -f ${OBJECTS} ${OUTPUT}
+
+test: ${OUTPUT}
+	node wasm/test.js
 
 ${OUTPUT} : ${OBJECTS} Makefile
 	emcc ${CFLAGS} ${LINK_FLAGS} -o ${OUTPUT} ${OBJECTS}
