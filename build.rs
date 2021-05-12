@@ -1,12 +1,8 @@
 use std::env;
 use std::path::PathBuf;
-use std::process::Command;
 
 fn main() {
-    let target = env::var("TARGET").expect("empty TARGET");
-    let emscripten = target == "wasm32-unknown-emscripten";
-
-    let src = vec![
+    let src = &[
         // SRC_SYS
         "jxrlib/image/sys/adapthuff.c",
         "jxrlib/image/sys/image.c",
@@ -34,14 +30,8 @@ fn main() {
         "jxrlib/jxrgluelib/JXRGluePFC.c",
         "jxrlib/jxrgluelib/JXRMeta.c",
     ];
-    let mut builder = cc::Build::new();
-    if emscripten {
-        builder.flag("-fignore-exceptions");
-        builder.flag("-s");
-        builder.flag("DISABLE_EXCEPTION_CATCHING=1");
-    }
-    builder
-        .files(src.iter())
+    cc::Build::new()
+        .files(src)
         .include("jxrlib")
         .include("jxrlib/common/include")
         .include("jxrlib/image/sys")
@@ -73,37 +63,19 @@ fn main() {
         .compile("jpegxr");
 
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
-    let mut clang_args = Vec::<String>::new();
-    if emscripten {
-        // emcc --cflags
-        let cflags = Command::new("emcc")
-            .arg("--cflags")
-            .output()
-            .expect("Failed to invoke 'emcc --cflags'")
-            .stdout;
-
-        // @fixme this could includes quotes in paths?
-        clang_args.extend(std::str::from_utf8(&cflags)
-            .expect("UTF-8 failure on emcc --cflags")
-            .split(" ")
-            .filter(|&str| str != "-fignore-exceptions") // for clang 11 and earlier
-            .map(|str| str.to_string()));
-
-        // workaround for https://github.com/rust-lang/rust-bindgen/issues/751
-        clang_args.push("-fvisibility=default".to_string());
-    }
-    clang_args.push("-D__ANSI__".to_string());
-    clang_args.push("-DDISABLE_PERF_MEASUREMENT".to_string());
-    clang_args.push("-Ijxrlib/jxrgluelib".to_string());
-    clang_args.push("-Ijxrlib/common/include".to_string());
-    clang_args.push("-Ijxrlib/image/sys".to_string());
-
+    let clang_args = &[
+        "-D__ANSI__",
+        "-DDISABLE_PERF_MEASUREMENT",
+        "-Ijxrlib/jxrgluelib",
+        "-Ijxrlib/common/include",
+        "-Ijxrlib/image/sys",
+    ];
     bindgen::Builder::default()
         .header("jxrlib/jxrgluelib/JXRGlue.h")
         .allowlist_function("^(WMP|PK|PixelFormatLookup|GetPixelFormatFromHash|GetImageEncodeIID|GetImageDecodeIID|FreeDescMetadata).*")
         .allowlist_var("^(WMP|PK|LOOKUP|GUID_PK|IID).*")
         .allowlist_type("^(WMP|PK|ERR|BITDEPTH|BD_|BITDEPTH_BITS|COLORFORMAT).*")
-        .clang_args(&clang_args)
+        .clang_args(clang_args)
         .derive_eq(true)
         .size_t_is_usize(true)
         .parse_callbacks(Box::new(bindgen::CargoCallbacks))

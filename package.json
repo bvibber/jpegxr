@@ -1,0 +1,23 @@
+{
+  "name": "jpegxr",
+  "version": "0.2.6",
+  "description": "Wrapper for Microsoft's C JPEG XR image codec library",
+  "main": "jpegxr.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brion/jpegxr.git"
+  },
+  "keywords": [
+    "jpegxr",
+    "jxr"
+  ],
+  "author": "Brion Vibber <brion@pobox.com>",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/brion/jpegxr/issues"
+  },
+  "homepage": "https://github.com/brion/jpegxr#readme"
+}

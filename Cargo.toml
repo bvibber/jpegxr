@@ -20,16 +20,3 @@ libc = "0.2.93"
 [build-dependencies]
 cc = { version = "1.0.67", features = ["parallel"] }
 bindgen = "0.58.1"
-
-## for testing
-#
-[features]
-defaults=[]
-bin=[]
-
-#
-#[lib]
-#crate-type = ["rlib", "cdylib"]
-#
-#[profile.release]
-#panic = "abort"
