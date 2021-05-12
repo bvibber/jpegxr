@@ -21,7 +21,7 @@ CFLAGS := \
 LINK_FLAGS := \
 	-s SUPPORT_BIG_ENDIAN=1 \
 	-s MODULARIZE=1 \
-	-s EXPORT_NAME=JpegXr \
+	-s EXPORT_NAME=jpegxr \
 	-s SINGLE_FILE=1 \
 	--no-entry \
 	--post-js=wasm_api.js \
