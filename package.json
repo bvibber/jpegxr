@@ -1,10 +1,18 @@
 {
   "name": "jpegxr",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "description": "Wrapper for Microsoft's C JPEG XR image codec library",
-  "main": "jpegxr.js",
+  "main": "wasm/jpegxr.js",
+  "files": [
+    "license.md",
+    "readme.md",
+    "wasm/jpegxr.js"
+  ],
   "scripts": {
-    "test": "make test"
+    "build": "make",
+    "test": "make test",
+    "prepare": "npm run-script build",
+    "prepublishOnly": "npm test"
   },
   "repository": {
     "type": "git",
