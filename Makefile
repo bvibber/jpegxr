@@ -52,7 +52,7 @@ SOURCES := \
 	jxrlib/jxrgluelib/JXRGlueJxr.c \
 	jxrlib/jxrgluelib/JXRGluePFC.c \
 	jxrlib/jxrgluelib/JXRMeta.c \
-	wasm_api/wasm_api.c
+	wasm_api.c
 
 OBJECTS := ${SOURCES:.c=.o}
 

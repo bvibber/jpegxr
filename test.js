@@ -1,9 +1,9 @@
 let fs = require('fs');
-let JpegXr = require('./jpegxr.js');
+let jpegxr = require('./jpegxr.js');
 
-JpegXr().then((jpegXr) => {
+jpegxr().then((codec) => {
     let bytes = fs.readFileSync('samples/panel-hdr.jxr');
-    let image = jpegXr.imageDecode(bytes);
+    let image = codec.imageDecode(bytes);
     console.log(image);
 
     let floats = new Float32Array(image.bytes.buffer);
