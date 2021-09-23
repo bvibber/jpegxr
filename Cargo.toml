@@ -14,9 +14,9 @@ categories = ["multimedia::images"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-thiserror = "1.0"
-libc = "0.2.93"
+thiserror = "1.0.29"
+libc = "0.2.102"
 
 [build-dependencies]
 cc = { version = "1.0.67", features = ["parallel"] }
-bindgen = "0.58.1"
+bindgen = "0.59.1"

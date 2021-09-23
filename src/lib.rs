@@ -24,8 +24,16 @@
 // POSSIBILITY OF SUCH DAMAGE.
 //
 
+// turn on all clippy's lints by default
+#![warn(clippy::all)]
+
 // this quiets the compiler about the C constant names
 #![allow(non_upper_case_globals)]
+
+// this is triggered by test cases in bindgen code
+// where it double-checks the offsets of struct members
+#![allow(deref_nullptr)]
+
 
 use std::convert::TryFrom;
 use std::io::{self, Read, Seek, SeekFrom};
@@ -114,28 +122,29 @@ use JXRError::*;
 /// 
 fn call(err: ERR) -> Result<()> {
     if err >= 0 {
-        return Ok(());
+        Ok(())
+    } else {
+        Err(match err {
+            WMP_errFail => Fail,
+            WMP_errNotYetImplemented => NotYetImplemented,
+            WMP_errAbstractMethod => AbstractMethod,
+            WMP_errOutOfMemory => OutOfMemory,
+            WMP_errFileIO => FileIO,
+            WMP_errBufferOverflow => BufferOverflow,
+            WMP_errInvalidParameter => InvalidParameter,
+            WMP_errInvalidArgument => InvalidArgument,
+            WMP_errUnsupportedFormat => UnsupportedFormat,
+            WMP_errIncorrectCodecVersion => IncorrectCodecVersion,
+            WMP_errIndexNotFound => IndexNotFound,
+            WMP_errOutOfSequence => OutOfSequence,
+            WMP_errNotInitialized => NotInitialized,
+            WMP_errMustBeMultipleOf16LinesUntilLastCall => MustBeMultipleOf16LinesUntilLastCall,
+            WMP_errPlanarAlphaBandedEncRequiresTempFile => PlanarAlphaBandedEncRequiresTempFile,
+            WMP_errAlphaModeCannotBeTranscoded => AlphaModeCannotBeTranscoded,
+            WMP_errIncorrectCodecSubVersion => IncorrectCodecSubVersion,
+            _ => UnknownError
+        })
     }
-    return Err(match err {
-        WMP_errFail => Fail,
-        WMP_errNotYetImplemented => NotYetImplemented,
-        WMP_errAbstractMethod => AbstractMethod,
-        WMP_errOutOfMemory => OutOfMemory,
-        WMP_errFileIO => FileIO,
-        WMP_errBufferOverflow => BufferOverflow,
-        WMP_errInvalidParameter => InvalidParameter,
-        WMP_errInvalidArgument => InvalidArgument,
-        WMP_errUnsupportedFormat => UnsupportedFormat,
-        WMP_errIncorrectCodecVersion => IncorrectCodecVersion,
-        WMP_errIndexNotFound => IndexNotFound,
-        WMP_errOutOfSequence => OutOfSequence,
-        WMP_errNotInitialized => NotInitialized,
-        WMP_errMustBeMultipleOf16LinesUntilLastCall => MustBeMultipleOf16LinesUntilLastCall,
-        WMP_errPlanarAlphaBandedEncRequiresTempFile => PlanarAlphaBandedEncRequiresTempFile,
-        WMP_errAlphaModeCannotBeTranscoded => AlphaModeCannotBeTranscoded,
-        WMP_errIncorrectCodecSubVersion => IncorrectCodecSubVersion,
-        _ => UnknownError
-    });
 }
 
 ///
@@ -667,28 +676,28 @@ impl Rect {
     /// Get the X offset.
     ///
     pub fn get_x(&self) -> i32 {
-        return self.raw.X;
+        self.raw.X
     }
 
     ///
     /// Get the Y offset.
     ///
     pub fn get_y(&self) -> i32 {
-        return self.raw.Y;
+        self.raw.Y
     }
 
     ///
     /// Get the width.
     ///
     pub fn get_width(&self) -> i32 {
-        return self.raw.Width;
+        self.raw.Width
     }
 
     ///
     /// Get the height, in pixels
     ///
     pub fn get_height(&self) -> i32 {
-        return self.raw.Height;
+        self.raw.Height
     }
 }
 
@@ -840,9 +849,9 @@ mod tests {
         assert_eq!(info.channels(), 4);
         assert_eq!(info.color_format(), ColorFormat::RGB);
         assert_eq!(info.bit_depth(), BitDepthBits::ThirtyTwoF);
-        assert_eq!(info.has_alpha(), true);
-        assert_eq!(info.premultiplied_alpha(), false);
-        assert_eq!(info.bgr(), false);
+        assert!(info.has_alpha());
+        assert!(!info.premultiplied_alpha());
+        assert!(!info.bgr());
         assert_eq!(info.photometric_interpretation(), PhotometricInterpretation::RGB);
         assert_eq!(info.samples_per_pixel(), 4);
     }
