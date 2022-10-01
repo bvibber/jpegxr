@@ -578,9 +578,7 @@ impl<R> InputStream<R> where R: Read + Seek {
         let stream = Self {
             raw: Box::new(WMPStream {
                 state: WMPStream__bindgen_ty_1 {
-                    pvObj: unsafe {
-                        std::mem::transmute(boxed_reader.as_mut())
-                    },
+                    pvObj: boxed_reader.as_mut() as *mut R as *mut c_void,
                 },
                 fMem: 0,
                 Close: Some(Self::input_stream_close),
@@ -723,7 +721,7 @@ impl<R> ImageDecode<R> where R: Read + Seek {
             let mut stream = InputStream::new(reader);
 
             let mut codec: *mut PKImageDecode = std::ptr::null_mut();
-            call(PKImageDecode_Create_WMP(std::mem::transmute(&mut codec)))?;
+            call(PKImageDecode_Create_WMP(&mut codec as *mut *mut PKImageDecode))?;
             call((*codec).Initialize.unwrap()(codec, stream.raw.as_mut()))?;
 
             Ok(Self {
