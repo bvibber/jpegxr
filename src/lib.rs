@@ -1,5 +1,5 @@
 //
-// Copyright © Brion Vibber
+// Copyright © Brooke Vibber
 // Some rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without
@@ -26,6 +26,7 @@
 
 // turn on all clippy's lints by default
 #![warn(clippy::all)]
+#![allow(unused_imports)]
 
 // this quiets the compiler about the C constant names
 #![allow(non_upper_case_globals)]

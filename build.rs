@@ -78,7 +78,7 @@ fn main() {
         .clang_args(clang_args)
         .derive_eq(true)
         .size_t_is_usize(true)
-        .parse_callbacks(Box::new(bindgen::CargoCallbacks))
+        .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
         .generate()
         .expect("Error building libjpegxr bindings")
         .write_to_file(out_path.join("bindings.rs"))

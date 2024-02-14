@@ -7,7 +7,7 @@ Currently only decoding is supported, but adding an encoder interface should be 
 # Authors
 
 The wrapped C JPEG XR library was written by many fine folks at Microsoft!
-Rust and JS code wrapping it, and tweaks to the C code, are by Brion Vibber `<brion @ pobox.com>`.
+Rust and JS code wrapping it, and tweaks to the C code, are by Brooke Vibber `<bvibber@pobox.com>`.
 
 # License
 
