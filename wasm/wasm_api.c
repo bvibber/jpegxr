@@ -156,10 +156,29 @@ int image_decode_copy_all(PKImageDecode *decode, void *dest, size_t stride)
     if (decode->GetSize(decode, &width, &height)) {
         return -1;
     }
+    // Honor thumbnail dims if previously set via image_decode_set_thumbnail_dims.
+    if (decode->WMP.wmiI.cThumbnailWidth > 0) {
+        width  = (int)decode->WMP.wmiI.cThumbnailWidth;
+        height = (int)decode->WMP.wmiI.cThumbnailHeight;
+    }
     PKRect rect = { 0, 0, width, height };
     if (decode->Copy(decode, &rect, dest, stride)) {
         return -1;
     }
+    return 0;
+}
+
+// Set the thumbnail decode dims. PKImageDecode_Copy_WMP picks the smallest
+// power-of-2 scale s such that s * cThumbnailWidth >= uWidth, then runs the
+// inverse transform at that scale. Caller computes desired output dims
+// (e.g. ceil(uWidth/2) for half-res) and passes them here before calling
+// image_decode_copy_all. Setting w=h=0 reverts to full-resolution decode.
+EMSCRIPTEN_KEEPALIVE
+int image_decode_set_thumbnail_dims(PKImageDecode *decode, int w, int h)
+{
+    if (w < 0 || h < 0) return -1;
+    decode->WMP.wmiI.cThumbnailWidth  = (size_t)w;
+    decode->WMP.wmiI.cThumbnailHeight = (size_t)h;
     return 0;
 }
 
