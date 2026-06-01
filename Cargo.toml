@@ -6,8 +6,8 @@ edition = "2018"
 license = "BSD-3-Clause"
 description = "Wrapper for Microsoft's C JPEG XR image codec library"
 readme = "readme.md"
-homepage = "https://github.com/brion/jpegxr"
-repository = "https://github.com/brion/jpegxr.git"
+homepage = "https://github.com/bvibber/jpegxr"
+repository = "https://github.com/bvibber/jpegxr.git"
 keywords = ["jxr", "jpegxr", "jpeg-xr"]
 categories = ["multimedia::images"]
 

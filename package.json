@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brion/jpegxr.git"
+    "url": "git+https://github.com/bvibber/jpegxr.git"
   },
   "keywords": [
     "jpegxr",
@@ -25,7 +25,7 @@
   "author": "Brooke Vibber <bvibber@pobox.com>",
   "license": "BSD-3-Clause",
   "bugs": {
-    "url": "https://github.com/brion/jpegxr/issues"
+    "url": "https://github.com/bvibber/jpegxr/issues"
   },
-  "homepage": "https://github.com/brion/jpegxr#readme"
+  "homepage": "https://github.com/bvibber/jpegxr#readme"
 }
