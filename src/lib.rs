@@ -44,6 +44,11 @@ use std::ffi::{NulError, c_void};
 mod jpegxr_sys;
 use jpegxr_sys::*;
 
+#[cfg(feature = "image")]
+pub mod image;
+#[cfg(feature = "image")]
+pub use image::register_decoding_hook;
+
 // For wrapping errors conveniently
 use thiserror::Error;
 
@@ -302,7 +307,7 @@ static GUID_MAP: &[(&GUID, PixelFormat)] = unsafe {
         (&GUID_PKPixelFormat128bppRGBFixedPoint, PixelFormat128bppRGBFixedPoint),
         (&GUID_PKPixelFormat64bppRGBAHalf, PixelFormat64bppRGBAHalf),
         (&GUID_PKPixelFormat64bppRGBHalf, PixelFormat64bppRGBHalf),
-        (&GUID_PKPixelFormat48bppRGB, PixelFormat48bppRGBHalf),
+        (&GUID_PKPixelFormat48bppRGBHalf, PixelFormat48bppRGBHalf),
         (&GUID_PKPixelFormat32bppRGBE, PixelFormat32bppRGBE),
         (&GUID_PKPixelFormat16bppGrayHalf, PixelFormat16bppGrayHalf),
         (&GUID_PKPixelFormat32bppGrayFixedPoint, PixelFormat32bppGrayFixedPoint),
